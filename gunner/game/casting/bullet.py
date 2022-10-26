@@ -19,8 +19,9 @@ class Bullet(Actor):
         self._body = body
         self._image = image
 
+    """
     def bounce_x(self):
-        """Bounces the bullet in the x direction."""
+        ""Bounces the bullet in the x direction.""
         velocity = self._body.get_velocity()
         rn = random.uniform(0.9, 1.1)
         vx = velocity.get_x() * rn * -1
@@ -29,13 +30,14 @@ class Bullet(Actor):
         self._body.set_velocity(velocity)
 
     def bounce_y(self):
-        """Bounces the bullet in the y direction."""
+        ""Bounces the bullet in the y direction.""
         velocity = self._body.get_velocity()
         rn = random.uniform(0.9, 1.1)
         vx = velocity.get_x()
         vy = velocity.get_y() * rn * -1 
         velocity = Point(vx, vy)
         self._body.set_velocity(velocity)
+    """
 
     def get_body(self):
         """Gets the bullet's body.
@@ -55,8 +57,7 @@ class Bullet(Actor):
         
     def release(self):
         """Release the bullet in a random direction."""
-        rn = random.uniform(0.9, 1.1)
-        vx = random.choice([-BULLET_VELOCITY * rn, BULLET_VELOCITY * rn])
+        vx = BULLET_VELOCITY
         vy = -BULLET_VELOCITY
         velocity = Point(vx, vy)
         self._body.set_velocity(velocity)

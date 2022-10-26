@@ -94,31 +94,26 @@ SCORE_FORMAT = "SCORE: {}"
 # BULLET
 BULLET_GROUP = "bullets"
 BULLET_IMAGE = "gunner/assets/images/000.png"
-BULLET_WIDTH = 28
-BULLET_HEIGHT = 28
+BULLET_WIDTH = 8
+BULLET_HEIGHT = 8
 BULLET_VELOCITY = 6
 
-# RACKET
-RACKET_GROUP = "rackets"
-RACKET_IMAGES = [f"gunner/assets/images/{n:03}.png" for n in range(100, 103)]
-RACKET_WIDTH = 106
-RACKET_HEIGHT = 28
-RACKET_RATE = 6
-RACKET_VELOCITY = 7
+# GUNMAN
+GUNMAN_GROUP = "gunmen"
+GUNMAN_IMAGES = [f"gunner/assets/images/{n:03}.png" for n in range(100, 107)]
+GUNMAN_WIDTH = 32
+GUNMAN_HEIGHT = 37
+GUNMAN_RATE = 6
+GUNMAN_VELOCITY = 7
 
-# BRICK
-BRICK_GROUP = "bricks"
-BRICK_IMAGES = {
-    "b": [f"gunner/assets/images/{i:03}.png" for i in range(10,19)],
-    "g": [f"gunner/assets/images/{i:03}.png" for i in range(20,29)],
-    "p": [f"gunner/assets/images/{i:03}.png" for i in range(30,39)],
-    "y": [f"gunner/assets/images/{i:03}.png" for i in range(40,49)]
-}
-BRICK_WIDTH = 80
-BRICK_HEIGHT = 28
-BRICK_DELAY = 0.5
-BRICK_RATE = 4
-BRICK_POINTS = 50
+# Attackers
+ATTACKER_GROUP = "attackers"
+ATTACKER_IMAGES = [f"gunner/assets/images/{i:03}.png" for i in range(10, 11)]
+ATTACKER_WIDTH = 43
+ATTACKER_HEIGHT = 26
+ATTACKER_DELAY = 0.5
+ATTACKER_RATE = 4
+ATTACKER_POINTS = 50
 
 # DIALOG
 DIALOG_GROUP = "dialogs"

@@ -1,13 +1,13 @@
 import csv
 from constants import *
 from game.casting.animation import Animation
-from game.casting.ball import Ball
+from game.casting.bullet import Bullet
 from game.casting.body import Body
-from game.casting.brick import Brick
+from game.casting.attacker import Attacker
 from game.casting.image import Image
 from game.casting.label import Label
 from game.casting.point import Point
-from game.casting.racket import Racket
+from game.casting.gunman import Gunman
 from game.casting.stats import Stats
 from game.casting.text import Text 
 from game.scripting.change_scene_action import ChangeSceneAction
@@ -88,9 +88,9 @@ class SceneManager:
         self._add_level(cast)
         self._add_lives(cast)
         self._add_score(cast)
-        self._add_ball(cast)
-        self._add_bricks(cast)
-        self._add_racket(cast)
+        self._add_bullet(cast)
+        self._add_attacker(cast)
+        self._add_gunman(cast)
         self._add_dialog(cast, ENTER_TO_START)
 
         self._add_initialize_script(script)
@@ -102,9 +102,9 @@ class SceneManager:
         self._add_release_script(script)
         
     def _prepare_next_level(self, cast, script):
-        self._add_ball(cast)
-        self._add_bricks(cast)
-        self._add_racket(cast)
+        self._add_bullet(cast)
+        self._add_attacker(cast)
+        self._add_gunman(cast)
         self._add_dialog(cast, PREP_TO_LAUNCH)
 
         script.clear_actions(INPUT)
@@ -113,8 +113,8 @@ class SceneManager:
         script.add_action(OUTPUT, PlaySoundAction(self.AUDIO_SERVICE, WELCOME_SOUND))
         
     def _prepare_try_again(self, cast, script):
-        self._add_ball(cast)
-        self._add_racket(cast)
+        self._add_bullet(cast)
+        self._add_gunman(cast)
         self._add_dialog(cast, PREP_TO_LAUNCH)
 
         script.clear_actions(INPUT)
@@ -123,7 +123,7 @@ class SceneManager:
         self._add_output_script(script)
 
     def _prepare_in_play(self, cast, script):
-        self._activate_ball(cast)
+        self._activate_bullet(cast)
         cast.clear_actors(DIALOG_GROUP)
 
         script.clear_actions(INPUT)
@@ -132,8 +132,8 @@ class SceneManager:
         self._add_output_script(script)
 
     def _prepare_game_over(self, cast, script):
-        self._add_ball(cast)
-        self._add_racket(cast)
+        self._add_bullet(cast)
+        self._add_gunman(cast)
         self._add_dialog(cast, WAS_GOOD_GAME)
 
         script.clear_actions(INPUT)
@@ -145,24 +145,24 @@ class SceneManager:
     # casting methods
     # ----------------------------------------------------------------------------------------------
     
-    def _activate_ball(self, cast):
-        ball = cast.get_first_actor(BALL_GROUP)
-        ball.release()
+    def _activate_bullet(self, cast):
+        bullet = cast.get_first_actor(BULLET_GROUP)
+        bullet.release()
 
-    def _add_ball(self, cast):
-        cast.clear_actors(BALL_GROUP)
-        x = CENTER_X - BALL_WIDTH / 2
-        y = SCREEN_HEIGHT - RACKET_HEIGHT - BALL_HEIGHT  
+    def _add_bullet(self, cast):
+        cast.clear_actors(BULLET_GROUP)
+        x = CENTER_X - BULLET_WIDTH / 2
+        y = SCREEN_HEIGHT - GUNMAN_HEIGHT - BULLET_HEIGHT  
         position = Point(x, y)
-        size = Point(BALL_WIDTH, BALL_HEIGHT)
+        size = Point(BULLET_WIDTH, BULLET_HEIGHT)
         velocity = Point(0, 0)
         body = Body(position, size, velocity)
-        image = Image(BALL_IMAGE)
-        ball = Ball(body, image, True)
-        cast.add_actor(BALL_GROUP, ball)
+        image = Image(BULLET_IMAGE)
+        bullet = Bullet(body, image, True)
+        cast.add_actor(BULLET_GROUP, bullet)
 
-    def _add_bricks(self, cast):
-        cast.clear_actors(BRICK_GROUP)
+    def _add_attacker(self, cast):
+        cast.clear_actors(ATTACKER_GROUP)
         
         stats = cast.get_first_actor(STATS_GROUP)
         level = stats.get_level() % BASE_LEVELS
@@ -174,25 +174,25 @@ class SceneManager:
             for r, row in enumerate(reader):
                 for c, column in enumerate(row):
 
-                    x = FIELD_LEFT + c * BRICK_WIDTH
-                    y = FIELD_TOP + r * BRICK_HEIGHT
+                    x = FIELD_LEFT + c * ATTACKER_WIDTH
+                    y = FIELD_TOP + r * ATTACKER_HEIGHT
                     color = column[0]
                     frames = int(column[1])
-                    points = BRICK_POINTS 
+                    points = ATTACKER_POINTS 
                     
                     if frames == 1:
                         points *= 2
                     
                     position = Point(x, y)
-                    size = Point(BRICK_WIDTH, BRICK_HEIGHT)
+                    size = Point(ATTACKER_WIDTH, ATTACKER_HEIGHT)
                     velocity = Point(0, 0)
-                    images = BRICK_IMAGES[color][0:frames]
+                    images = ATTACKER_IMAGES[0:frames]
 
                     body = Body(position, size, velocity)
-                    animation = Animation(images, BRICK_RATE, BRICK_DELAY)
+                    animation = Animation(images, ATTACKER_RATE, ATTACKER_DELAY)
 
-                    brick = Brick(body, animation, points)
-                    cast.add_actor(BRICK_GROUP, brick)
+                    brick = Attacker(body, animation, points)
+                    cast.add_actor(ATTACKER_GROUP, brick)
 
     def _add_dialog(self, cast, message):
         cast.clear_actors(DIALOG_GROUP)
@@ -227,17 +227,17 @@ class SceneManager:
         stats = Stats()
         cast.add_actor(STATS_GROUP, stats)
 
-    def _add_racket(self, cast):
-        cast.clear_actors(RACKET_GROUP)
-        x = CENTER_X - RACKET_WIDTH / 2
-        y = SCREEN_HEIGHT - RACKET_HEIGHT
+    def _add_gunman(self, cast):
+        cast.clear_actors(GUNMAN_GROUP)
+        x = CENTER_X - GUNMAN_WIDTH / 2
+        y = SCREEN_HEIGHT - GUNMAN_HEIGHT
         position = Point(x, y)
-        size = Point(RACKET_WIDTH, RACKET_HEIGHT)
+        size = Point(GUNMAN_WIDTH, GUNMAN_HEIGHT)
         velocity = Point(0, 0)
         body = Body(position, size, velocity)
-        animation = Animation(RACKET_IMAGES, RACKET_RATE)
-        racket = Racket(body, animation)
-        cast.add_actor(RACKET_GROUP, racket)
+        animation = Animation(GUNMAN_IMAGES, GUNMAN_RATE)
+        gunman = Gunman(body, animation)
+        cast.add_actor(GUNMAN_GROUP, gunman)
 
     # ----------------------------------------------------------------------------------------------
     # scripting methods
