@@ -173,7 +173,6 @@ class SceneManager:
 
             for r, row in enumerate(reader):
                 for c, column in enumerate(row):
-
                     x = FIELD_LEFT + c * ATTACKER_WIDTH
                     y = FIELD_TOP + r * ATTACKER_HEIGHT
                     color = column[0]

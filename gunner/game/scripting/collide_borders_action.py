@@ -10,34 +10,13 @@ class CollideBordersAction(Action):
         self._audio_service = audio_service    
         
     def execute(self, cast, script, callback):
-        ball = cast.get_first_actor(BULLET_GROUP)
-        body = ball.get_body()
-        position = body.get_position()
-        x = position.get_x()
-        y = position.get_y()
-        bounce_sound = Sound(BOUNCE_SOUND)
-        over_sound = Sound(OVER_SOUND)
+        gunman = cast.get_first_actor(GUNMAN_GROUP)
+        attackers = cast.get_actors(ATTACKER_GROUP)
+        for attacker in attackers:
+            attacker_body = attacker.get_body()
+            gunman_body = gunman.get_body()
 
-        """        
-        if x < FIELD_LEFT:
-            # ball.bounce_x()
-            self._audio_service.play_sound(bounce_sound)
-
-        elif x >= (FIELD_RIGHT - BULLET_WIDTH):
-            # ball.bounce_x()
-            self._audio_service.play_sound(bounce_sound)
-
-        if y < FIELD_TOP:
-            # ball.bounce_y()
-            self._audio_service.play_sound(bounce_sound)
-
-        elif y >= (FIELD_BOTTOM - BULLET_WIDTH):
-            stats = cast.get_first_actor(STATS_GROUP)
-            stats.lose_life()
-            
-            if stats.get_lives() > 0:
-                callback.on_next(TRY_AGAIN) 
-            else:
-                callback.on_next(GAME_OVER)
-                self._audio_service.play_sound(over_sound)
-        """
+            if self._physics_service.has_collided(attacker_body, gunman_body):
+                bounce_sound = Sound(BOUNCE_SOUND)
+                over_sound = Sound(OVER_SOUND)
+                cast.remove_actor(GUNMAN_GROUP, gunman)

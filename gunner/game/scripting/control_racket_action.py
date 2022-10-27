@@ -18,4 +18,6 @@ class ControlRacketAction(Action):
         elif self._keyboard_service.is_key_down(DOWN): 
             racket.swing_down()  
         else: 
-            racket.stop_moving()        
+            racket.stop_moving()
+
+        
